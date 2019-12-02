@@ -1,5 +1,7 @@
 package day1
 
+import java.util.Optional
+
 import common.UnitSpec
 
 class Day1Test extends UnitSpec {
@@ -25,7 +27,7 @@ class Day1Test extends UnitSpec {
       }
     }
   }
-
+Optional.of
   "Part2.fuelByModule" when {
     "given the mass of a module" should {
       "calculate the amount of fuel required to launch it" in {
