@@ -6,8 +6,12 @@ object Day1 {
   def main(args: Array[String]): Unit = {
     val rawInput = loadInputFile()
     val moduleMasses = parseInput(rawInput)
-    val fuel = totalFuel(moduleMasses)
-    println(s"Ammount of fuel required (part 1): $fuel")
+
+    val fuel1 = Part1.totalFuel(moduleMasses)
+    println(s"Ammount of fuel required (part 1): $fuel1")
+
+    val fuel2 = Part2.totalFuel(moduleMasses)
+    println(s"Ammount of fuel required (part 2): $fuel2")
   }
 
   private def loadInputFile() = {
@@ -21,10 +25,4 @@ object Day1 {
       val trimmed = line.trim
       if (trimmed.nonEmpty) List(trimmed.toLong) else List.empty
     }
-
-  def totalFuel(moduleMasses: List[Long]): Long =
-    moduleMasses.map(fuelByModule).sum
-
-  def fuelByModule(moduleMass: Long): Long =
-    moduleMass / 3 - 2
 }
