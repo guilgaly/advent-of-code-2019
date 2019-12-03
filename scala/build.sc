@@ -23,3 +23,5 @@ trait AocModule extends ScalaModule with ScalafmtModule {
 }
 
 object day1 extends AocModule
+
+object day2 extends AocModule
