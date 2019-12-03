@@ -26,18 +26,22 @@ object Computer {
       memory: Memory,
       address: Address,
   ): Either[Err, InstructionResult] = {
-    def execute(instruction: Instruction): InstructionResult = instruction match {
-      case twoOpInstr: Instruction.TwoOperands =>
-        val left = memory(twoOpInstr.left)
-        val right = memory(twoOpInstr.right)
-        val opResult = twoOpInstr match {
-          case _: Addition       => left + right
-          case _: Multiplication => left * right
-        }
-        ProgramContinues(memory.updated(twoOpInstr.output, opResult), address + 4)
-      case Halt =>
-        ProgramHalts(memory)
-    }
+    def execute(instruction: Instruction): InstructionResult =
+      instruction match {
+        case twoOpInstr: Instruction.TwoOperands =>
+          val left = memory(twoOpInstr.left)
+          val right = memory(twoOpInstr.right)
+          val opResult = twoOpInstr match {
+            case _: Addition       => left + right
+            case _: Multiplication => left * right
+          }
+          ProgramContinues(
+            memory.updated(twoOpInstr.output, opResult),
+            address + 4,
+          )
+        case Halt =>
+          ProgramHalts(memory)
+      }
 
     parseInstruction(memory, address).map(execute)
   }
