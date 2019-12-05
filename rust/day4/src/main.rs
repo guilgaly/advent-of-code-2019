@@ -17,17 +17,41 @@ fn main() {
 
     numbers = numbers.into_iter()
         .filter(|number| {
-            let value: u32 = number.iter().rev().enumerate().map(|(idx, d)| (*d as u32) * 10_u32.pow(idx as u32)).sum();
+            let value: u32 = number.iter()
+                .rev()
+                .enumerate()
+                .map(|(idx, d)| (*d as u32) * 10_u32.pow(idx as u32))
+                .sum();
             124075 <= value && value <= 580769
         })
         .collect();
     println!("2. size: {}", numbers.len());
 
+//    numbers = numbers.into_iter()
+//        .filter(|number| {
+//            let pairs = number[0..5].iter().zip(number[1..6].iter());
+//            pairs.into_iter().find(|(x1, x2)| x1 == x2).is_some()
+//        })
+//        .collect();
+//    println!("3. size: {}", numbers.len());
+
     numbers = numbers.into_iter()
         .filter(|number| {
-            let pairs = number[0..5].iter().zip(number[1..6].iter());
-            pairs.into_iter().find(|(x1, x2)| x1 == x2).is_some()
-        })
-        .collect();
-    println!("3. size: {}", numbers.len());
+            let mut i = 0;
+            let mut curr_digit: Option<u8> = None;
+            let mut curr_digit_count = 0;
+            while i < 6 {
+                if curr_digit == Some(number[i]) {
+                    curr_digit_count += 1;
+                } else if curr_digit_count == 2 {
+                    break;
+                } else {
+                    curr_digit = Some(number[i]);
+                    curr_digit_count = 1;
+                }
+                i += 1;
+            }
+            curr_digit_count == 2
+        }).collect();
+    println!("4. size: {}", numbers.len());
 }
