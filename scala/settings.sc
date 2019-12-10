@@ -21,7 +21,7 @@ def scalacOptions = Seq(
   // "-language:experimental.macros", // Allow macro definition (besides implementation and application)
 
   // ********** Warning Settings ***********************************************
-  "-Werror", // Fail the compilation if there are any warnings.
+  //  "-Werror", // Fail the compilation if there are any warnings.
   "-Wdead-code", //  Warn when dead code is identified.
   "-Wextra-implicit", // Warn when more than one implicit parameter section is defined.
   // "-Wmacros:none", // Do not inspect expansions or their original trees when generating unused symbol warnings.
