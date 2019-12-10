@@ -15,6 +15,29 @@ object Day6 {
     val orbitsMap = OrbitsMapParser.parse(inputLines)
 
     println(s"All orbits count: ${orbitsMap.totalOrbitsCount}")
+
+    val distanceToSanta =
+      for {
+        parent <- findClosestParent(orbitsMap)
+        dist1 <- parent.outwardDistanceTo("YOU")
+        dist2 <- parent.outwardDistanceTo("SAN")
+      } yield dist1 + dist2 - 2
+
+    println(s"Distance to Santa: $distanceToSanta")
+  }
+
+  private def findClosestParent(nodeToSearch: MapNode): Option[MapNode] = {
+    def isParent(node: MapNode) = node.contains("YOU") && node.contains("SAN")
+
+    val search = nodeToSearch.orbits.collectFirst {
+      case orbit if isParent(orbit) => findClosestParent(orbit)
+    }
+
+    search.fold(
+      Some(nodeToSearch).filter(isParent),
+    )(
+      identity,
+    )
   }
 
   private def loadInputFile() = {

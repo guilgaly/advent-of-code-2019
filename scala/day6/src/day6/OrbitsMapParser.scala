@@ -1,7 +1,5 @@
 package day6
 
-import scala.collection.immutable.TreeSet
-
 object OrbitsMapParser {
   def parse(lines: List[(String, String)]): MapNode = {
     def buildNode(name: String): MapNode = {
