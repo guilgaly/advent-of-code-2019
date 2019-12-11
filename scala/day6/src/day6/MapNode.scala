@@ -14,7 +14,7 @@ final case class MapNode(center: String, orbits: List[MapNode]) {
 
   def outwardDistanceTo(other: String): Option[Int] = {
     def searchOrbits = orbits.flatMap(_.outwardDistanceTo(other)) match {
-      case Nil => None
+      case Nil      => None
       case nonEmpty => Some(1 + nonEmpty.min)
     }
 
