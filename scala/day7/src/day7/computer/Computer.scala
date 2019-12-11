@@ -6,30 +6,28 @@ object Computer {
   def executeProgram(
       program: Memory,
       inputs: List[Value] = List.empty,
+      pauseOnOutput: Boolean = false,
   ): Either[Err, ProgramState] = {
-    import InstructionResult._
-
-    @tailrec
-    def recurs(
-        currentState: ProgramState,
-        currentAddress: Address,
-    ): Either[Err, ProgramState] =
-      executeNextInstruction(currentState, currentAddress) match {
-        case Left(err)                    => Left(err)
-        case Right(ProgramHalts(updated)) => Right(updated)
-        case Right(ProgramContinues(updatedMemory, nextAddress)) =>
-          recurs(updatedMemory, nextAddress)
-      }
-
     val initialState = ProgramState(program, inputs, outputs = List.empty)
-    recurs(initialState, 0)
+    resumeProgram(initialState, pauseOnOutput)
+  }
+
+  @tailrec
+  def resumeProgram(
+      currentState: ProgramState,
+      pauseOnOutput: Boolean = false,
+  ): Either[Err, ProgramState] = {
+    executeNextInstruction(currentState, pauseOnOutput) match {
+      case Left(err)                                       => Left(err)
+      case Right(state: ProgramState) if state.status.stop => Right(state)
+      case Right(state)                                    => resumeProgram(state, pauseOnOutput)
+    }
   }
 
   private[day7] def executeNextInstruction(
       state: ProgramState,
-      address: Address,
-  ): Either[Err, InstructionResult] = {
-    import InstructionResult._
+      pauseOnOutput: Boolean,
+  ): Either[Err, ProgramState] = {
     import Params._
 
     def getParamValue(param: Param) = param match {
@@ -42,19 +40,23 @@ object Computer {
         resInput <- state.popInput
         (value, inputPopped) = resInput
         updatedState <- inputPopped.updateMemory(params.output, value)
-      } yield ProgramContinues(updatedState, address + 2)
+      } yield updatedState.incrementAddress(2)
 
     def output(params: Params1In0Out) =
       getParamValue(params.param0).map { value =>
-        ProgramContinues(state.pushOutput(value), address + 2)
+        val updatedState = state.pushOutput(value).incrementAddress(2)
+        if (pauseOnOutput)
+          updatedState.copy(status = ProgramStatus.Paused)
+        else
+          updatedState
       }
 
     def jump(params: Params2In0Out, predicate: Value => Boolean) =
       for {
         value0 <- getParamValue(params.param0)
         value1 <- getParamValue(params.param1)
-        newAddress = if (predicate(value0)) value1 else address + 3
-      } yield ProgramContinues(state, newAddress)
+        newAddress = if (predicate(value0)) value1 else state.address + 3
+      } yield state.copy(address = newAddress)
 
     def calculate(params: Params2In1Out, operation: (Value, Value) => Value) =
       for {
@@ -62,12 +64,11 @@ object Computer {
         value1 <- getParamValue(params.param1)
         result = operation(value0, value1)
         updatedState <- state.updateMemory(params.output, result)
-      } yield ProgramContinues(updatedState, address + 4)
+      } yield updatedState.incrementAddress(4)
 
     def execute(
         instruction: Instruction[_ <: Params],
-    ): Either[Err, InstructionResult] = {
-      // println(s"Instruction: $instruction")
+    ): Either[Err, ProgramState] = {
       instruction match {
         case instr: Instruction.With0In1Out =>
           instr match { case Instruction.Input(params) => input(params) }
@@ -88,11 +89,11 @@ object Computer {
               calculate(params, (left, right) => if (left == right) 1 else 0)
           }
         case Instruction.Halt =>
-          Right(ProgramHalts(state))
+          Right(state.copy(status = ProgramStatus.Halted))
       }
     }
 
-    parseInstruction(state.memory, address).flatMap(execute)
+    parseInstruction(state.memory, state.address).flatMap(execute)
   }
 
   private[day7] def parseInstruction(
