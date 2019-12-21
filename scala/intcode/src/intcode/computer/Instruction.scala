@@ -1,6 +1,6 @@
-package day9.computer
+package intcode.computer
 
-import day9.computer.Params._
+import intcode.computer.Params._
 
 sealed trait Instruction[P <: Params] {
   def params: P

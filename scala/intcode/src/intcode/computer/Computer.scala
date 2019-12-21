@@ -1,4 +1,4 @@
-package day9.computer
+package intcode.computer
 
 import scala.annotation.tailrec
 
@@ -20,11 +20,11 @@ object Computer {
       pauseOnOutput: Boolean = false,
   ): Either[Err, ProgramState] = {
     executeNextInstruction(currentState, pauseOnOutput) match {
-      case Left(err)                                       => Left(err)
+      case Left(err) => Left(err)
       case Right(state: ProgramState) if state.status.stop =>
         println(s"i: $i")
         Right(state)
-      case Right(state)                                    => resumeProgram(state, pauseOnOutput)
+      case Right(state) => resumeProgram(state, pauseOnOutput)
     }
   }
 

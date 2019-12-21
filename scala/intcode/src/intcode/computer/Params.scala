@@ -1,4 +1,4 @@
-package day9.computer
+package intcode.computer
 
 sealed trait Params
 
@@ -8,8 +8,8 @@ object Params {
   final case class Params0In1Out(output: Param.ReadWrite) extends Params
   object Params0In1Out {
     def parse(
-      rawInstruction: RawInstruction,
-      val0: Long,
+        rawInstruction: RawInstruction,
+        val0: Long,
     ): Either[Err, Params0In1Out] =
       Param.parseReadWrite(val0, rawInstruction.mode0).map(Params0In1Out.apply)
   }
@@ -36,8 +36,11 @@ object Params {
       } yield Params2In0Out(param0, param1)
   }
 
-  final case class Params2In1Out(param0: Param, param1: Param, output: Param.ReadWrite)
-      extends Params
+  final case class Params2In1Out(
+      param0: Param,
+      param1: Param,
+      output: Param.ReadWrite,
+  ) extends Params
   object Params2In1Out {
     def parse(
         rawInstruction: RawInstruction,

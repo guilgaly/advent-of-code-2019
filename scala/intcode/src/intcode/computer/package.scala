@@ -1,4 +1,4 @@
-package day9
+package intcode
 
 package object computer {
   type Memory = Vector[Long]

@@ -1,11 +1,10 @@
 package day9
 
-import day9.computer.Computer
+import intcode.computer.Computer
 
 import scala.io.{Source, StdIn}
 
 object Day9 {
-
   def main(args: Array[String]): Unit = {
     println("Press enter...")
     StdIn.readLine()
@@ -30,7 +29,6 @@ object Day9 {
     val end = System.nanoTime()
     val elapsed = (end - start) / (1000 * 1000)
     println(s"elapsed: $elapsed")
-
 
     println("Press enter...")
     StdIn.readLine()

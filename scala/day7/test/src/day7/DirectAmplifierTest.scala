@@ -8,7 +8,9 @@ class DirectAmplifierTest extends UnitSpec {
     "given a set of phase settings" should {
       "calculate the output" in {
         def execTest(program: Memory, settings: List[Value], expected: Value) =
-          DirectAmplifier.thrusterSignal(program, settings) shouldBe Right(expected)
+          DirectAmplifier.thrusterSignal(program, settings) shouldBe Right(
+            expected,
+          )
 
         execTest(
           Vector(3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0,

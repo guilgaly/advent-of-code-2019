@@ -5,7 +5,7 @@ case class ProgramState(
     inputs: List[Value],
     outputs: List[Value], // stored in reverse order
     address: Address = 0,
-    status: ProgramStatus = ProgramStatus.Running
+    status: ProgramStatus = ProgramStatus.Running,
 ) {
   def updateMemory(index: Address, value: Value): Either[String, ProgramState] =
     if (0 <= index && index < memory.size)

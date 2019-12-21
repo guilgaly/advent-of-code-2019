@@ -1,4 +1,4 @@
-package day9.computer
+package intcode.computer
 
 case class RawInstruction(opcode: Opcode, mode0: Int, mode1: Int, mode2: Int)
 

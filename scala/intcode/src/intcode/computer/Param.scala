@@ -1,4 +1,4 @@
-package day9.computer
+package intcode.computer
 
 sealed trait Param
 
