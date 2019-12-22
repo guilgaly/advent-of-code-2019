@@ -3,6 +3,8 @@ import mill.scalalib._
 import mill.scalalib.scalafmt.ScalafmtModule
 import $file.dependencies
 import $file.settings
+import mill.api.Loose
+import mill.define.Target
 
 object commonTest extends ScalaModule with ScalafmtModule {
   override def scalaVersion = settings.scalaVersion
@@ -44,4 +46,6 @@ object day8 extends AocModule
 object day9 extends AocModule {
   override def moduleDeps = Seq(intcode)
 }
-object day10 extends AocModule
+object day10 extends AocModule {
+  override def ivyDeps = Agg(dependencies.commonsMath)
+}
