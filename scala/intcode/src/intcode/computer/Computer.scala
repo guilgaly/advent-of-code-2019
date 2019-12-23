@@ -3,8 +3,6 @@ package intcode.computer
 import scala.annotation.tailrec
 
 object Computer {
-  var i = 0
-
   def executeProgram(
       program: Memory,
       inputs: List[Value] = List.empty,
@@ -22,7 +20,6 @@ object Computer {
     executeNextInstruction(currentState, pauseOnOutput) match {
       case Left(err) => Left(err)
       case Right(state: ProgramState) if state.status.stop =>
-        println(s"i: $i")
         Right(state)
       case Right(state) => resumeProgram(state, pauseOnOutput)
     }
@@ -33,8 +30,6 @@ object Computer {
       pauseOnOutput: Boolean,
   ): Either[Err, ProgramState] = {
     import Params._
-
-    i += 1
 
     def getParamValue(param: Param) = param match {
       case Param.Position(address) =>
