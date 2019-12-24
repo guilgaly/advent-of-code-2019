@@ -52,3 +52,6 @@ object day10 extends AocModule {
 object day11 extends AocModule {
   override def moduleDeps = Seq(intcode)
 }
+object day12 extends AocModule {
+  override def ivyDeps = Agg(dependencies.commonsMath)
+}

@@ -113,8 +113,8 @@ object Computer {
         getInstrParam(0).map(Params0In1Out.apply)
 
       def parseParams1In0Out =
-        getInstrParam(0).flatMap(
-          val0 => Params1In0Out.parse(rawInstruction, val0),
+        getInstrParam(0).flatMap(val0 =>
+          Params1In0Out.parse(rawInstruction, val0),
         )
 
       def parseParams2In0Out =
