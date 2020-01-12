@@ -31,6 +31,12 @@ case class ProgramState(
   def pushOutput(output: Value): ProgramState =
     copy(outputs = output :: outputs)
 
+  def flushOutputs: ProgramState =
+    copy(outputs = List.empty)
+
+  def resume: ProgramState =
+    copy(status = ProgramStatus.Running)
+
   override def toString: String =
     s"""ProgramState:
        |- memory: ${memory.mkString(",")}
